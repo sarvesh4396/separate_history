@@ -1,0 +1,13 @@
+class Create<%= class_name %>History < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+    create_table :<%= table_name.pluralize %>_histories do |t|
+      t.bigint :original_id
+      # Add columns from the original table here
+      t.string :event
+      t.datetime :history_created_at
+      t.datetime :history_updated_at
+    end
+
+    add_index :<%= table_name.pluralize %>_histories, :original_id
+  end
+end

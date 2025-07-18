@@ -1,0 +1,18 @@
+class Sync<%= class_name %>History < ActiveRecord::Migration[<%= ActiveRecord::Migration.current_version %>]
+  def change
+<% @missing_columns.each do |column_name| %>
+    <% column = @model_class.columns.find { |c| c.name == column_name } %>
+    <% 
+      # Build column options hash manually for Rails 6+ compatibility
+      options = {}
+      options[:limit] = column.limit if column.limit
+      options[:precision] = column.precision if column.precision
+      options[:scale] = column.scale if column.scale
+      options[:null] = column.null unless column.null
+      options[:default] = column.default if column.default
+      options_str = options.any? ? ", #{options.map{|k,v| "#{k}: #{v.inspect}"}.join(', ')}" : ""
+    %>
+    add_column :<%= @history_table_name %>, :<%= column.name %>, :<%= column.type %><%= options_str %>
+<% end %>
+  end
+end

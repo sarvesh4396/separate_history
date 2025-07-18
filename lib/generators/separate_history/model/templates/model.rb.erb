@@ -1,0 +1,13 @@
+class <%= class_name%>History < ApplicationRecord
+  include SeparateHistory::History
+  belongs_to :original, class_name: '<%= @original_class.name %>', foreign_key: 'original_id'
+
+  # Add any additional associations or validations here
+
+  # Example validation
+  validates :event, presence: true
+  validates :history_created_at, presence: true
+  validates :history_updated_at, presence: true
+
+  # Add any custom methods or scopes here
+end
