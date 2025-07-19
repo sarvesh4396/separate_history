@@ -8,3 +8,4 @@
 /tmp/
 gemfiles/*.lock
 .rspec_status
+**.sqlite3
