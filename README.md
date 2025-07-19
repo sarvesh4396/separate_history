@@ -329,6 +329,12 @@ This project uses `appraisal` to test against multiple versions of Rails. The te
 $ bundle exec appraisal rake
 ```
 
+Before running test suites install dependencies.
+
+```bash
+$ bundle exec appraisal install
+```
+
 You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 ## Development
