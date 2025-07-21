@@ -63,19 +63,19 @@ module SeparateHistory
     def attributes_for_history(event)
       options = self.class.separate_history_options
 
-      attrs = if options[:track_changes] && event == 'update'
+      attrs = if options[:track_changes] && event == "update"
                 saved_changes.transform_values(&:last).with_indifferent_access
               else
                 attributes.dup
               end
-      
+
       # For track_changes, we need to ensure original_id is set properly
       # since saved_changes doesn't include the id attribute
-      if options[:track_changes] && event == 'update'
-        attrs["original_id"] = id
-      else
-        attrs["original_id"] = attrs.delete("id")
-      end
+      attrs["original_id"] = if options[:track_changes] && event == "update"
+                               id
+                             else
+                               attrs.delete("id")
+                             end
       attrs["event"] = event.to_s
 
       # attrs["history_created_at"] = attrs.delete("created_at") if attrs.key?("created_at")
