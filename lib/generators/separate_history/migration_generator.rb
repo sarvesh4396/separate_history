@@ -8,7 +8,7 @@ module SeparateHistory
       argument :name, type: :string, desc: 'The name of the model to create history for'
 
       def create_migration_file
-        migration_template 'migration.rb.erb', "db/migrate/create_#{history_class_name.underscore}.rb"
+        migration_template 'migration.rb.erb', "db/migrate/create_#{history_table_name}.rb"
       end
 
       private
@@ -23,15 +23,28 @@ module SeparateHistory
 
       def original_class
         @original_class ||= name.camelize.constantize
+      rescue NameError
+        nil
       end
 
       def original_table_name
-        original_class.table_name
+        if original_class
+          original_class.table_name
+        else
+          name.underscore.pluralize
+        end
       end
 
       def original_columns
-        @original_columns = original_class.columns.reject do |c|
-          [original_class.primary_key, "created_at", "updated_at"].include?(c.name)
+        if original_class
+          # Use actual model columns if class exists
+          original_class.columns.reject do |c|
+            [original_class.primary_key, "created_at", "updated_at"].include?(c.name)
+          end
+        else
+          # Use common columns structure if model doesn't exist
+          # This will be a basic structure for the migration
+          []
         end
       end
     end
