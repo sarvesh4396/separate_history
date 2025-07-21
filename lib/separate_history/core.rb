@@ -12,6 +12,7 @@ module SeparateHistory
       valid_options = %i[only except history_class_name events track_changes]
       invalid_options = options.keys - valid_options
       raise ArgumentError, "Invalid options: #{invalid_options.join(", ")}" if invalid_options.any?
+
       options[:track_changes] = false if options[:track_changes].nil?
       unless options[:track_changes].is_a?(TrueClass) || options[:track_changes].is_a?(FalseClass)
         raise ArgumentError, "track_changes must be true or false"
@@ -37,7 +38,7 @@ module SeparateHistory
         # Returns the snapshot of the record as it was at or before the given timestamp
         def history_for(id, timestamp = Time.current)
           history_class.where(original_id: id)
-                       .where("history_updated_at <= ?", timestamp)
+                       .where(history_updated_at: ..timestamp)
                        .order(history_updated_at: :desc, id: :desc)
                        .first
         end
