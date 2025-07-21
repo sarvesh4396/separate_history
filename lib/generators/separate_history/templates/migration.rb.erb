@@ -2,21 +2,29 @@ class Create<%= history_class_name %> < ActiveRecord::Migration[<%= ActiveRecord
   def change
     create_table :<%= history_table_name %> do |t|
 <% original_columns.each do |column| -%>
-      <%-
-  options = {
-    limit: column.limit,
-    precision: column.precision,
-    scale: column.scale,
-    null: true, # Force null to be true for all columns
-    default: column.default
-  }.compact
-
-  # Always include null: true, even if it was nil before
-  options[:null] = true
-
-  options_string = options.map { |k, v| "#{k}: #{v.inspect}" }.join(', ')
+      <%- 
+  # Handle both ActiveRecord column objects and hash format
+  if column.respond_to?(:type)
+    # ActiveRecord column object
+    column_type = column.type
+    column_name = column.name
+    options = {
+      limit: column.limit,
+      precision: column.precision,
+      scale: column.scale,
+      null: true, # Force null to be true for all columns
+      default: column.default
+    }.compact
+    options[:null] = true
+    options_string = options.map { |k, v| "#{k}: #{v.inspect}" }.join(', ')
+  else
+    # Hash format
+    column_type = column[:type]
+    column_name = column[:name]
+    options_string = "null: true"
+  end
 -%>
-      t.<%= column.type %> :<%= column.name %><%= ", #{options_string}" if options_string.present? %>
+      t.<%= column_type %> :<%= column_name %><%= ", #{options_string}" if options_string.present? %>
 <% end -%>
       t.integer :original_id, null: false
       t.string :event, null: false
