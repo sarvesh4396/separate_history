@@ -19,6 +19,11 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true # runs 'bundle install' and caches installed gems
 
+      - name: Setup
+        run: |
+          chmod +x ./bin/setup
+          ./bin/setup
+      
       - name: Install appraisals
         run: bundle exec appraisal install
 
