@@ -7,8 +7,8 @@ require "rake/testtask"
 RSpec::Core::RakeTask.new(:spec)
 
 Rake::TestTask.new(:test) do |t|
-  t.libs << 'test'
-  t.test_files = FileList['test/**/*_test.rb']
+  t.libs << "test"
+  t.test_files = FileList["test/**/*_test.rb"]
 end
 
 # require "rubocop/rake_task"

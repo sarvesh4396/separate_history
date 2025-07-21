@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "database_cleaner-active_record", "~> 2.0"
   spec.add_development_dependency "rails", "~> 7.0"
   spec.add_development_dependency "rspec-rails", "~> 6.0"
+  spec.add_development_dependency "rubocop", "~> 1.21"
   spec.add_development_dependency "rubocop-rails-omakase", "~> 1.0"
   spec.add_development_dependency "sqlite3", "~> 1.4"
 

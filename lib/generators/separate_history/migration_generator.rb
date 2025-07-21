@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 require "rails/generators"
 require "rails/generators/active_record"
 
 module SeparateHistory
   module Generators
     class MigrationGenerator < ActiveRecord::Generators::Base
-      source_root File.expand_path('templates', __dir__)
-      argument :name, type: :string, desc: 'The name of the model to create history for'
+      source_root File.expand_path("templates", __dir__)
+      argument :name, type: :string, desc: "The name of the model to create history for"
 
       def create_migration_file
-        migration_template 'migration.rb.erb', "db/migrate/create_#{history_table_name}.rb"
+        migration_template "migration.rb.erb", "db/migrate/create_#{history_table_name}.rb"
       end
 
       private

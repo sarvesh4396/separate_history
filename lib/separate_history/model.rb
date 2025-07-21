@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/concern"
 
 module SeparateHistory
@@ -101,7 +103,7 @@ module SeparateHistory
       # If track_changes is true, we always want to record the update
       # because the point is to track only the changed attributes
       return true if self.class.separate_history_options[:track_changes]
-      
+
       if self.class.separate_history_options[:only].nil? && self.class.separate_history_options[:except].nil?
         return true
       end

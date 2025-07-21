@@ -20,7 +20,7 @@ RSpec.describe SeparateHistory do
     end
 
     it "creates a history record on destroy" do
-      user.destroy
+      user.destroy!
       expect(UserHistory.count).to eq(2) # create and destroy
       history = UserHistory.last
       expect(history.event).to eq("destroy")
@@ -187,7 +187,6 @@ RSpec.describe SeparateHistory do
         expect(user.user_histories).to eq([history])
         expect(user.separate_histories).to eq([history])
       end
-
     end
 
     # context 'with track_changes option' do
@@ -250,18 +249,18 @@ RSpec.describe SeparateHistory do
       it "returns the correct snapshot for a given time" do
         # Create a snapshot at the current time
         user.snapshot_history
-        
+
         # Get history for 2 days ago (should be the original create event)
         snapshot = user.history_as_of(2.days.ago)
         expect(snapshot).to be_present
         expect(snapshot.name).to eq("John Doe")
-        
+
         # Get history for 12 hours ago (should be the update to "Yesterday")
         snapshot = user.history_as_of(12.hours.ago)
         expect(snapshot).to be_present
         expect(snapshot.name).to eq("Yesterday")
       end
-      
+
       it "returns nil if no history exists before the given time" do
         snapshot = user.history_as_of(1.year.ago)
         expect(snapshot).to be_nil
@@ -307,9 +306,9 @@ RSpec.describe SeparateHistory do
   # Add this at the end of the file, after all other test cases
   describe "SeparateHistory with track_changes" do
     before(:all) do
-      class TrackedProduct < ActiveRecord::Base
-        self.table_name = 'users'  # Using users table for testing
-        has_separate_history track_changes: true, history_class_name: 'UserHistory'
+      class TrackedProduct < ApplicationRecord
+        self.table_name = "users" # Using users table for testing
+        has_separate_history track_changes: true, history_class_name: "UserHistory"
       end
     end
 
@@ -317,25 +316,25 @@ RSpec.describe SeparateHistory do
       Object.send(:remove_const, :TrackedProduct) if defined?(TrackedProduct)
     end
 
-    it 'records only the changed attributes on update when track_changes is true' do
+    it "records only the changed attributes on update when track_changes is true" do
       # Create initial record
       product = TrackedProduct.create!(
-        name: 'Initial Product',
-        email: 'initial@example.com',
+        name: "Initial Product",
+        email: "initial@example.com",
         created_at: Time.current,
         updated_at: Time.current
       )
 
       # Update only the name
-      product.update!(name: 'Updated Product')
+      product.update!(name: "Updated Product")
 
       # Get the history record
       history_record = product.user_histories.last
 
       # Verify the history record
-      expect(history_record.event).to eq('update')
-      expect(history_record.name).to eq('Updated Product')
-      expect(history_record.email).to be_nil  # Should be nil as it wasn't changed
+      expect(history_record.event).to eq("update")
+      expect(history_record.name).to eq("Updated Product")
+      expect(history_record.email).to be_nil # Should be nil as it wasn't changed
       expect(history_record.original_id).to eq(product.id)
     end
   end
