@@ -1,6 +1,6 @@
 # SeparateHistory
 
-[![CI](https://github.com/sarvesh4396/separate_history/actions/workflows/ci.yml/badge.svg)](https://github.com/sarvesh4396/separate_history/actions/workflows/ci.yml)
+[![CI](https://github.com/sarvesh4396/separate_history/actions/workflows/test.yml/badge.svg)](https://github.com/sarvesh4396/separate_history/actions/workflows/test.yml)
 [![Gem Version](https://badge.fury.io/rb/separate_history.svg)](https://badge.fury.io/rb/separate_history)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
